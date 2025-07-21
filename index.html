@@ -234,6 +234,7 @@ function drawCategoryCharts(allSubjects) {
                 datasets: datasets
             },
             options: {
+                devicePixelRatio: window.devicePixelRatio,
                 scales: { y: { beginAtZero: true } },
                 plugins: { legend: { display: category === "생명/지구과학" } }
             }
