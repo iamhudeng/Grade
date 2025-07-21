@@ -14,65 +14,60 @@
             font-size: 2rem;
             margin-bottom: 1rem;
         }
-        input, button {
-            padding: 0.5rem;
-            margin: 0.3rem 0;
-            font-size: 1rem;
+        .section {
+            margin-bottom: 2rem;
         }
-        canvas {
-            margin-top: 2rem;
+        .section h2 {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+        input {
+            width: 4rem;
+            padding: 0.3rem;
+            margin: 0.2rem;
         }
     </style>
 </head>
 <body>
     <h1>충남과학고 2학년 내신 분석기</h1>
-    <label>학기: <input type="text" id="semester" placeholder="예: 2-1"></label><br>
-    <label>과목: <input type="text" id="subject" placeholder="예: 수학"></label><br>
-    <label>등수: <input type="number" id="rank" placeholder="예: 15"></label><br>
-    <button onclick="addGrade()">추가</button>
 
-    <canvas id="myChart" width="400" height="200"></canvas>
+    <div class="section">
+        <h2>1학년 1학기</h2>
+        국어: <input type="number"><br>
+        수학: <input type="number"><br>
+        영어: <input type="number"><br>
+        통합사회: <input type="number"><br>
+        통합과학: <input type="number"><br>
+        물리학 I: <input type="number"><br>
+        화학 I: <input type="number"><br>
+        정보과학: <input type="number">
+    </div>
 
-    <script>
-        const semesters = [];
-        const ranks = [];
-        const subjects = [];
+    <div class="section">
+        <h2>1학년 2학기</h2>
+        국어: <input type="number"><br>
+        영어: <input type="number"><br>
+        통합사회: <input type="number"><br>
+        생명과학 I: <input type="number"><br>
+        지구과학 I: <input type="number"><br>
+        정보과학: <input type="number"><br>
+        심화 수학 I: <input type="number"><br>
+        고급 물리학: <input type="number"><br>
+        고급 화학: <input type="number">
+    </div>
 
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: semesters,
-                datasets: [{
-                    label: '등수 추이',
-                    data: ranks,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        reverse: true,
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+    <div class="section">
+        <h2>2학년 1학기</h2>
+        독서: <input type="number"><br>
+        영어 I: <input type="number"><br>
+        한국사: <input type="number"><br>
+        중국어 I: <input type="number"><br>
+        심화 수학 II: <input type="number"><br>
+        고급 물리학: <input type="number"><br>
+        고급 화학: <input type="number"><br>
+        고급 생명과학: <input type="number"><br>
+        고급 지구과학: <input type="number">
+    </div>
 
-        function addGrade() {
-            const semester = document.getElementById('semester').value;
-            const subject = document.getElementById('subject').value;
-            const rank = parseInt(document.getElementById('rank').value);
-
-            semesters.push(`${semester} ${subject}`);
-            ranks.push(rank);
-            subjects.push(subject);
-
-            myChart.update();
-        }
-    </script>
 </body>
 </html>
