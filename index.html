@@ -199,10 +199,6 @@ function drawCategoryCharts(allSubjects) {
         const canvas = card.querySelector("canvas");
         const ctx = canvas.getContext("2d");
         const datasets = [];
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = canvas.clientWidth * ratio;
-        canvas.height = canvas.clientHeight * ratio;
-        ctx.scale(ratio, ratio);
 
         if (category === "생명/지구과학") {
             datasets.push({
@@ -248,7 +244,6 @@ function drawCategoryCharts(allSubjects) {
                 datasets: datasets
             },
             options: {
-                responsive: false,
                 maintainAspectRatio: false,
                 devicePixelRatio: window.devicePixelRatio,
                 scales: {
