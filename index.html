@@ -152,42 +152,96 @@
             drawSubjectCharts(allSubjects);
         }
 
-        function drawSubjectCharts(allSubjects) {
-            const container = document.getElementById("subject-charts-container");
-            container.innerHTML = "";
+        <script>
+function drawCategoryCharts(allSubjects) {
+    const container = document.getElementById("category-charts-container");
+    container.innerHTML = "";
 
-            Object.entries(allSubjects).forEach(([subject, data]) => {
-                const card = document.createElement("div");
-                card.className = "chart-card";
-                card.innerHTML = `<h3>${subject}</h3><canvas class="small-chart"></canvas>`;
-                container.appendChild(card);
+    const categories = {
+        "국어": ["국어", "독서"],
+        "영어": ["영어", "영어 I"],
+        "수학": ["수학", "심화 수학 I", "심화 수학 II"],
+        "통합사회&한국사": ["통합사회", "한국사"],
+        "물리학": ["물리학 I", "고급 물리학"],
+        "화학": ["화학 I", "고급 화학"],
+        "생명/지구과학": ["통합과학", "생명과학 I", "고급 생명과학", "지구과학 I", "고급 지구과학"],
+        "정보과학": ["정보과학"]
+    };
 
-                const ctx = card.querySelector("canvas").getContext("2d");
-                if (subjectCharts[subject]) subjectCharts[subject].destroy();
+    Object.entries(categories).forEach(([category, subjects]) => {
+        const data1 = [null, null, null]; // 생명과학 선 (혹은 단일 선)
+        const data2 = [null, null, null]; // 지구과학 선 (생명/지구과학 전용)
 
-                subjectCharts[subject] = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ["1학년 1학기", "1학년 2학기", "2학년 1학기"],
-                        datasets: [{
-                            data: data,
-                            borderColor: 'steelblue',
-                            backgroundColor: 'skyblue',
-                            fill: false,
-                            tension: 0
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+        // 데이터 채우기
+        subjects.forEach(subject => {
+            if (allSubjects[subject]) {
+                allSubjects[subject].forEach((val, idx) => {
+                    if (val !== null) {
+                        if (category === "생명/지구과학") {
+                            if (subject.includes("생명") || subject === "통합과학") {
+                                data1[idx] = val; // 생명과학 계열
                             }
-                        },
-                        plugins: { legend: { display: false } }
+                            if (subject.includes("지구") || subject === "통합과학") {
+                                data2[idx] = val; // 지구과학 계열
+                            }
+                        } else {
+                            if (data1[idx] === null) data1[idx] = val; // 첫 번째 값만 저장
+                        }
                     }
                 });
+            }
+        });
+
+        // 차트 카드 생성
+        const card = document.createElement("div");
+        card.className = "chart-card";
+        card.innerHTML = `<h3>${category}</h3><canvas class="small-chart"></canvas>`;
+        container.appendChild(card);
+
+        const ctx = card.querySelector("canvas").getContext("2d");
+        const datasets = [];
+
+        if (category === "생명/지구과학") {
+            datasets.push({
+                label: "생명과학",
+                data: data1,
+                borderColor: "steelblue",
+                backgroundColor: "steelblue",
+                fill: false,
+                tension: 0
+            });
+            datasets.push({
+                label: "지구과학",
+                data: data2,
+                borderColor: "orange",
+                backgroundColor: "orange",
+                fill: false,
+                tension: 0
+            });
+        } else {
+            datasets.push({
+                label: category,
+                data: data1,
+                borderColor: "steelblue",
+                backgroundColor: "skyblue",
+                fill: false,
+                tension: 0
             });
         }
+
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["1학년 1학기", "1학년 2학기", "2학년 1학기"],
+                datasets: datasets
+            },
+            options: {
+                scales: { y: { beginAtZero: true } },
+                plugins: { legend: { display: category === "생명/지구과학" } }
+            }
+        });
+    });
+}
     
    document.addEventListener("DOMContentLoaded", () => {
     const allInputs = Array.from(document.querySelectorAll("input[type='number']"));
@@ -212,8 +266,8 @@
     </div>
 
     <div class="section">
-        <h2>모든 과목별 등수 추이</h2>
-        <div id="subject-charts-container" class="grid-container"></div>
-    </div>
+    <h2>8개 범주별 등수 추이</h2>
+    <div id="category-charts-container" class="grid-container"></div>
+</div>
 </body>
 </html>
