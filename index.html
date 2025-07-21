@@ -125,6 +125,7 @@ function calculateGrades() {
 
     // 결과를 하단에 출력
     document.getElementById("grade-result-output").textContent = resultText;
+    drawKoreanChart();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -143,11 +144,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+let koreanChartInstance = null;
+
+    function drawKoreanChart() {
+        const labels = ["1학년 1학기", "1학년 2학기", "2학년 1학기"];
+        const rankInputs = [
+            document.querySelectorAll('.grade-1-1')[0],  // 국어
+            document.querySelectorAll('.grade-1-2')[0],  // 국어
+            document.querySelectorAll('.grade-2-1')[0]   // 독서
+        ];
+
+        const ranks = rankInputs.map(input => {
+            const val = parseInt(input.value);
+            return isNaN(val) ? null : val;
+        });
+
+        // 그래프가 이미 있다면 제거
+        if (koreanChartInstance) {
+            koreanChartInstance.destroy();
+        }
+
+        const ctx = document.getElementById('koreanChart').getContext('2d');
+        koreanChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '등수',
+                    data: ranks,
+                    fill: false,
+                    borderColor: 'steelblue',
+                    backgroundColor: 'skyblue',
+                    tension: 0.3,
+                    spanGaps: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        reverse: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '등수'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
     </script>
 
 <div class="section">
     <h2>등급 결과</h2>
     <pre id="grade-result-output" style="background: #f9f9f9; padding: 1rem; border: 1px solid #ccc;"></pre>
 </div>
+    
+<div class="section">
+    <h2>국어 계열 등수 추이</h2>
+    <canvas id="koreanChart" width="400" height="200"></canvas>
+</div>
+
 </body>
 </html>
