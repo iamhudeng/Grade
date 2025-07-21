@@ -195,9 +195,14 @@ function drawCategoryCharts(allSubjects) {
         card.className = "chart-card";
         card.innerHTML = `<h3>${category}</h3><canvas class="small-chart"></canvas>`;
         container.appendChild(card);
-
-        const ctx = card.querySelector("canvas").getContext("2d");
+        
+        const canvas = card.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
         const datasets = [];
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = canvas.clientWidth * ratio;
+        canvas.height = canvas.clientHeight * ratio;
+        ctx.scale(ratio, ratio);
 
         if (category === "생명/지구과학") {
             datasets.push({
@@ -234,6 +239,8 @@ function drawCategoryCharts(allSubjects) {
                 datasets: datasets
             },
             options: {
+                responsive: false,
+                maintainAspectRatio: false,
                 devicePixelRatio: window.devicePixelRatio,
                 scales: { y: { beginAtZero: true } },
                 plugins: { legend: { display: category === "생명/지구과학" } }
