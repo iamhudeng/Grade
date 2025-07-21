@@ -80,40 +80,57 @@
 
     <script>
         function getGrade(rank, total) {
-            const gradeRanges = {
-                72: [3, 8, 17, 29, 43, 55, 64, 69, 72],
-                70: [3, 8, 16, 28, 42, 54, 62, 67, 70],
-                69: [3, 8, 16, 28, 41, 53, 61, 66, 69]
-            };
+    const gradeRanges = {
+        72: [3, 8, 17, 29, 43, 55, 64, 69, 72],
+        70: [3, 8, 16, 28, 42, 54, 62, 67, 70],
+        69: [3, 8, 16, 28, 41, 53, 61, 66, 69]
+    };
 
-            const ranges = gradeRanges[total];
-            for (let i = 0; i < ranges.length; i++) {
-                if (rank <= ranges[i]) {
-                    return i + 1;
-                }
+    const ranges = gradeRanges[total];
+    for (let i = 0; i < ranges.length; i++) {
+        if (rank <= ranges[i]) {
+            return i + 1;
+        }
+    }
+    return 9;
+}
+
+function calculateGrades() {
+    const sections = [
+        { className: 'grade-1-1', total: 72, title: "1학년 1학기", subjects: ["국어", "수학", "영어", "통합사회", "통합과학", "물리학 I", "화학 I", "정보과학"] },
+        { className: 'grade-1-2', total: 70, title: "1학년 2학기", subjects: ["국어", "영어", "통합사회", "생명과학 I", "지구과학 I", "정보과학", "심화 수학 I", "고급 물리학", "고급 화학"] },
+        { className: 'grade-2-1', total: 69, title: "2학년 1학기", subjects: ["독서", "영어 I", "한국사", "중국어 I", "심화 수학 II", "고급 물리학", "고급 화학", "고급 생명과학", "고급 지구과학"] }
+    ];
+
+    let resultText = "";
+
+    sections.forEach(section => {
+        const inputs = document.querySelectorAll('.' + section.className);
+        resultText += `${section.title}\n`;
+
+        inputs.forEach((input, i) => {
+            const rank = parseInt(input.value);
+            if (!isNaN(rank)) {
+                const grade = getGrade(rank, section.total);
+                resultText += `- ${section.subjects[i]}: ${grade}등급\n`;
+                input.style.backgroundColor = '#f0f8ff'; // optional visual cue
+            } else {
+                resultText += `- ${section.subjects[i]}: 입력 안됨\n`;
+                input.style.backgroundColor = ''; // clear color
             }
-            return 9;
-        }
+        });
 
-        function calculateGrades() {
-            const sections = [
-                { className: 'grade-1-1', total: 72 },
-                { className: 'grade-1-2', total: 70 },
-                { className: 'grade-2-1', total: 69 }
-            ];
+        resultText += '\n';
+    });
 
-            sections.forEach(section => {
-                const inputs = document.querySelectorAll('.' + section.className);
-                inputs.forEach(input => {
-                    const rank = parseInt(input.value);
-                    if (!isNaN(rank)) {
-                        const grade = getGrade(rank, section.total);
-                        input.style.backgroundColor = '#f0f8ff';
-                        input.value = `${rank} (등급 ${grade})`;
-                    }
-                });
-            });
-        }
+    // 결과를 하단에 출력
+    document.getElementById("grade-result-output").textContent = resultText;
+}
     </script>
+
+<div class="section">
+    <h2>등급 결과</h2>
+    <pre id="grade-result-output" style="background: #f9f9f9; padding: 1rem; border: 1px solid #ccc;"></pre>
+</div>
 </body>
 </html>
