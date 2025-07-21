@@ -126,6 +126,23 @@ function calculateGrades() {
     // 결과를 하단에 출력
     document.getElementById("grade-result-output").textContent = resultText;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const allInputs = Array.from(document.querySelectorAll("input[type='number']"));
+
+    allInputs.forEach((input, index) => {
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (index > 0) allInputs[index - 1].focus();
+            } else if (e.key === "ArrowDown" || e.key === "Enter") {
+                e.preventDefault();
+                if (index < allInputs.length - 1) allInputs[index + 1].focus();
+            }
+        });
+    });
+});
+
     </script>
 
 <div class="section">
