@@ -46,7 +46,7 @@
         }
         canvas.small-chart {
             max-width: 100%;
-            height: 350px !important;
+            height: 450px !important;
         }
     </style>
 </head>
@@ -242,8 +242,16 @@ function drawCategoryCharts(allSubjects) {
                 responsive: false,
                 maintainAspectRatio: false,
                 devicePixelRatio: window.devicePixelRatio,
-                scales: { y: { beginAtZero: true } },
-                plugins: { legend: { display: category === "생명/지구과학" } }
+                scales: { y: { beginAtZero: true, title: { display: true, text: '등수' }}},
+                plugins: { legend: { display: category === "생명/지구과학" }},
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}등수`;
+                        }
+                    }
+                }
             }
         });
     });
