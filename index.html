@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>충남과학고 내신 분석기</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        input, button {
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            font-size: 1rem;
+        }
+        canvas {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>충남과학고 2학년 내신 분석기</h1>
+    <label>학기: <input type="text" id="semester" placeholder="예: 2-1"></label><br>
+    <label>과목: <input type="text" id="subject" placeholder="예: 수학"></label><br>
+    <label>등수: <input type="number" id="rank" placeholder="예: 15"></label><br>
+    <button onclick="addGrade()">추가</button>
+
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script>
+        const semesters = [];
+        const ranks = [];
+        const subjects = [];
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: semesters,
+                datasets: [{
+                    label: '등수 추이',
+                    data: ranks,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        reverse: true,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function addGrade() {
+            const semester = document.getElementById('semester').value;
+            const subject = document.getElementById('subject').value;
+            const rank = parseInt(document.getElementById('rank').value);
+
+            semesters.push(`${semester} ${subject}`);
+            ranks.push(rank);
+            subjects.push(subject);
+
+            myChart.update();
+        }
+    </script>
+</body>
+</html>
