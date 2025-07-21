@@ -242,16 +242,10 @@ function drawCategoryCharts(allSubjects) {
                 responsive: false,
                 maintainAspectRatio: false,
                 devicePixelRatio: window.devicePixelRatio,
-                scales: { y: { beginAtZero: true, title: { display: true, text: '등수' }}},
-                plugins: { legend: { display: category === "생명/지구과학" }},
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.dataset.label}: ${context.raw}등수`;
-                        }
-                    }
-                }
+                scales: {
+                    x:{ticks:{ font:{ size: 30 } }},
+                    y: { ticks:{ font:{ size: 30 } }, beginAtZero: true, title: { display: true, text: '등수', font: {size: 30} }}},
+                plugins: { legend: { labels:{ font:{ size: 30 } }, display: category === "생명/지구과학" }}
             }
         });
     });
