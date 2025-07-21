@@ -148,11 +148,9 @@
                 resultText += '\n';
             });
             document.getElementById("grade-result-output").textContent = resultText;
-
-            drawSubjectCharts(allSubjects);
+            drawCategoryCharts(allSubjects);
         }
 
-        <script>
 function drawCategoryCharts(allSubjects) {
     const container = document.getElementById("category-charts-container");
     container.innerHTML = "";
