@@ -1,87 +1,106 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>충남과학고 내신 엑셀 생성기</title>
-  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-  <style>
-    body { font-family: sans-serif; margin: 2rem; }
-    input { width: 4rem; text-align: center; margin: 0.2rem; }
-    .grid { display: grid; grid-template-columns: repeat(4, max-content); gap: 0.5rem; align-items: center; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>충남과학고 내신 분석기</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .section {
+            margin-bottom: 2rem;
+        }
+        .section h2 {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+        input {
+            width: 8rem;
+            padding: 0.3rem;
+            margin: 0.2rem;
+            text-align: center;
+            -moz-appearance: textfield;
+        }
+        input[type="number"] {
+            width: 4rem;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-  <h1>성적 입력</h1>
+    <h1>충남과학고 2학년 내신 분석기</h1>
 
-  <label>이름: <input type="text" id="nameInput"></label><br>
-  <label>기수: <input type="number" id="classInput"></label>
+    <div class="section">
+        <h2>기본 정보</h2>
+        이름: <input type="text" id="student-name" placeholder="이름 입력"><br>
+        기수(ex: 31, 32 ...): <input type="number" id="student-class" placeholder="기수 입력">
+    </div>
 
-  <h2>과목별 등수</h2>
-  <div class="grid" id="gradeGrid">
-    <!-- JS로 과목들 자동 삽입 -->
-  </div>
+    <div class="section">
+        <h2>1학년 1학기</h2>
+        국어 : <input type="number" class="grade-1-1"><br>
+        수학 : <input type="number" class="grade-1-1"><br>
+        영어 : <input type="number" class="grade-1-1"><br>
+        통합사회 : <input type="number" class="grade-1-1"><br>
+        통합과학 : <input type="number" class="grade-1-1"><br>
+        물리학 I : <input type="number" class="grade-1-1"><br>
+        화학 I : <input type="number" class="grade-1-1"><br>
+        정보과학 : <input type="number" class="grade-1-1">
+    </div>
 
-  <br><button onclick="generateExcel()">엑셀 생성 및 다운로드</button>
+    <div class="section">
+        <h2>1학년 2학기</h2>
+        국어 : <input type="number" class="grade-1-2"><br>
+        영어 : <input type="number" class="grade-1-2"><br>
+        통합사회 : <input type="number" class="grade-1-2"><br>
+        생명과학 I : <input type="number" class="grade-1-2"><br>
+        지구과학 I : <input type="number" class="grade-1-2"><br>
+        정보과학 : <input type="number" class="grade-1-2"><br>
+        심화 수학 I : <input type="number" class="grade-1-2"><br>
+        고급 물리학 : <input type="number" class="grade-1-2"><br>
+        고급 화학 : <input type="number" class="grade-1-2">
+    </div>
 
-  <script>
-    const subjects = [
-      "국어", "영어", "통합사회, 한국사", "정보과학", "중국어",
-      "수학", "물리학", "화학", "생명과학", "지구과학"
-    ];
-    const semesters = ["1학년 1학기", "1학년 2학기", "2학년 1학기"];
+    <div class="section">
+        <h2>2학년 1학기</h2>
+        독서 : <input type="number" class="grade-2-1"><br>
+        영어 I : <input type="number" class="grade-2-1"><br>
+        한국사 : <input type="number" class="grade-2-1"><br>
+        중국어 I : <input type="number" class="grade-2-1"><br>
+        심화 수학 II : <input type="number" class="grade-2-1"><br>
+        고급 물리학 : <input type="number" class="grade-2-1"><br>
+        고급 화학 : <input type="number" class="grade-2-1"><br>
+        고급 생명과학 : <input type="number" class="grade-2-1"><br>
+        고급 지구과학 : <input type="number" class="grade-2-1">
+    </div>
 
-    const gradeGrid = document.getElementById("gradeGrid");
-    subjects.forEach((subject, rowIndex) => {
-      const label = document.createElement("div");
-      label.textContent = subject;
-      gradeGrid.appendChild(label);
-      semesters.forEach((sem, colIndex) => {
-        const input = document.createElement("input");
-        input.type = "number";
-        input.id = `grade-${rowIndex}-${colIndex}`;
-        gradeGrid.appendChild(input);
-      });
+    <script>
+   document.addEventListener("DOMContentLoaded", () => {
+    const allInputs = Array.from(document.querySelectorAll("input[type='number'], input[type='text']"));
+
+    allInputs.forEach((input, index) => {
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (index > 0) allInputs[index - 1].focus();
+            } else if (e.key === "ArrowDown" || e.key === "Enter") {
+                e.preventDefault();
+                if (index < allInputs.length - 1) allInputs[index + 1].focus();
+            }
+        });
     });
+});
+    </script>
 
-    async function generateExcel() {
-      const name = document.getElementById("nameInput").value;
-      const cls = document.getElementById("classInput").value;
-
-      // 1. 엑셀 템플릿 fetch
-      const response = await fetch("만들어보자.xlsx");
-      const data = await response.arrayBuffer();
-      const workbook = XLSX.read(data, { type: "array" });
-
-      // 2. 시트 선택
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-      // 3. 이름, 기수 입력 (C2, C3)
-      sheet["C2"] = { v: name };
-      sheet["C3"] = { v: Number(cls) };
-
-      // 4. 등수 입력 (C6~E15)
-      for (let row = 0; row < subjects.length; row++) {
-        for (let col = 0; col < semesters.length; col++) {
-          const cellAddress = XLSX.utils.encode_cell({ c: 2 + col, r: 5 + row }); // C=2, D=3, E=4 / row 5 = C6
-          const input = document.getElementById(`grade-${row}-${col}`);
-          const val = Number(input.value);
-          if (!isNaN(val)) {
-            sheet[cellAddress] = { v: val };
-          }
-        }
-      }
-
-      // 5. 새 엑셀 생성 및 다운로드
-      const newWorkbook = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-      const blob = new Blob([newWorkbook], { type: "application/octet-stream" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "업데이트된_내신.xlsx";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  </script>
 </body>
 </html>
